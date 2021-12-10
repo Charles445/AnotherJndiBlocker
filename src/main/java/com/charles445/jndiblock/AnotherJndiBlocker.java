@@ -21,29 +21,29 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 )
 public class AnotherJndiBlocker
 {
-    public static final String MODID = "jndiblock";
-    public static final String NAME = "Another Jndi Blocker";
-    public static final String VERSION = "0.1.1";
-    
-    public static final Logger logger = LogManager.getLogger("AnotherJndiBlocker");
-    
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
-    	//Written by Charles445
-    	try
-    	{
-	    	//Let's begin
-	    	
-	    	//Load the Jndi default instance a couple of times so the manager's count increments a bunch
-	    	//Safety measure to avoid the map getting cleaned up while we work
-	    	for(int i=0;i<8;i++)
-	    		JndiManager.getDefaultManager();
-	    	
-	    	//Now it's in the MAP for good
-	    	//Let's replace it
-	    	
-	    	//Grab the MAP
+	public static final String MODID = "jndiblock";
+	public static final String NAME = "Another Jndi Blocker";
+	public static final String VERSION = "0.1.2";
+	
+	public static final Logger logger = LogManager.getLogger("AnotherJndiBlocker");
+	
+	@Mod.EventHandler
+	public void preInit(FMLPreInitializationEvent event)
+	{
+		//Written by Charles445
+		try
+		{
+			//Let's begin
+			
+			//Load the Jndi default instance a couple of times so the manager's count increments a bunch
+			//Safety measure to avoid the map getting cleaned up while we work
+			for(int i=0;i<8;i++)
+				JndiManager.getDefaultManager();
+			
+			//Now it's in the MAP for good
+			//Let's replace it
+			
+			//Grab the MAP
 			Field f_AbstractManager_MAP = AbstractManager.class.getDeclaredField("MAP");
 			f_AbstractManager_MAP.setAccessible(true);
 			Map<String, AbstractManager> managerMap = (Map<String, AbstractManager>) f_AbstractManager_MAP.get(null);
@@ -65,10 +65,10 @@ public class AnotherJndiBlocker
 			{
 				managerMap.put(replacementKey, new FakeAbstractManager(null, "FakeJndiManager"));
 			}
-    	}
-    	catch(Exception e)
-    	{
-    		throw new RuntimeException("Failed to run AnotherJndiBlocker!", e);
-    	}
-    }
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException("Failed to run AnotherJndiBlocker!", e);
+		}
+	}
 }
