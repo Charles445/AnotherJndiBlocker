@@ -13,12 +13,17 @@ import org.apache.logging.log4j.core.net.JndiManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = AnotherJndiBlocker.MODID, name = AnotherJndiBlocker.NAME, version = AnotherJndiBlocker.VERSION)
+@Mod(
+		modid = AnotherJndiBlocker.MODID, 
+		name = AnotherJndiBlocker.NAME, 
+		version = AnotherJndiBlocker.VERSION,
+		acceptableRemoteVersions = "*"
+)
 public class AnotherJndiBlocker
 {
     public static final String MODID = "jndiblock";
     public static final String NAME = "Another Jndi Blocker";
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.1.1";
     
     public static final Logger logger = LogManager.getLogger("AnotherJndiBlocker");
     
