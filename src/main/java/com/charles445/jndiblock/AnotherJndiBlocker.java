@@ -23,13 +23,25 @@ public class AnotherJndiBlocker
 {
 	public static final String MODID = "jndiblock";
 	public static final String NAME = "Another Jndi Blocker";
-	public static final String VERSION = "0.1.2";
+	public static final String VERSION = "0.1.3";
 	
 	public static final Logger logger = LogManager.getLogger("AnotherJndiBlocker");
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
+		try
+		{
+			Class.forName("org.apache.logging.log4j.core.net.JndiManager");
+			Class.forName("org.apache.logging.log4j.core.lookup.JndiLookup");
+		}
+		catch (ClassNotFoundException e)
+		{
+			logger.warn("AnotherJndiBlocker cannot find JndiManager or JndiLookup on the server. The mod will assume the classes have been manually deleted, and so server protection will not run.");
+			recommendForge();
+			return;
+		}
+		
 		//Written by Charles445
 		try
 		{
@@ -65,10 +77,38 @@ public class AnotherJndiBlocker
 			{
 				managerMap.put(replacementKey, new FakeAbstractManager(null, "FakeJndiManager"));
 			}
+
+			if(managersToReplace.size() > 1)
+			{
+				logger.error("AnotherJndiBlocker server protection is running, but the replaced manager size was unexpectedly large. The server protection may be unreliable.");
+				finalError();
+			}
+			else if(managersToReplace.size() > 0)
+			{
+				logger.info("AnotherJndiBlocker server protection is running!");
+				logger.info("This protection is rudimentary, updating forge is your best option.");
+				recommendForge();
+			}
+			else
+			{
+				logger.error("AnotherJndiBlocker could not find the JndiManager instance being used. Server protection will not work.");
+				finalError();
+			}
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException("Failed to run AnotherJndiBlocker!", e);
+			logger.error("Failed to run AnotherJndiBlocker on the server, but JndiLookup still exists. Server protection will not work.", e);
+			finalError();
 		}
+	}
+	
+	private void finalError()
+	{
+		logger.error("If you are running a forge version earlier than 1.12.2 - 14.23.5.2858, update forge right now! Do not keep the server running!");
+	}
+	
+	private void recommendForge()
+	{
+		logger.info("If you are running a forge version earlier than 1.12.2 - 14.23.5.2858, update forge as soon as you can.");
 	}
 }
